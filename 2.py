@@ -1,4 +1,6 @@
 import matplotlib.pyplot as plt
+import numpy as np
+from mpl_toolkits.mplot3d import Axes3D
 
 
 class Circles:
@@ -8,7 +10,7 @@ class Circles:
         self.y=y
         self.r=r
 
-    def draw(self):
+    def draw_circle(self):
         fig, self.ax = plt.subplots()
 
         # Создание осей координат в центре
@@ -37,7 +39,7 @@ y=float(data_first[1])
 r=float(data_first[2])
 
 circle_1=Circles(x,y,r)
-circle_1.draw()
+circle_1.draw_circle()
 
 data_second=input("Введите новые координаты центра и радиус окружности: ")
 data_second=data_second.split()
@@ -47,3 +49,33 @@ r=float(data_second[2])
 
 circle_1.info()
 
+class Sphere(Circles):
+
+    def __init__(self,x,y,z,r):
+        super().__init__(x,y,r)
+        self.z=z
+    
+    def draw_sphere(self):
+
+        u = np.linspace(0, 2 * np.pi, 100) 
+        v = np.linspace(0, np.pi, 100)     
+        X = self.x + self.r * np.outer(np.cos(u), np.sin(v))  
+        Y = self.y + self.r * np.outer(np.sin(u), np.sin(v))  
+        Z = self.z + self.r * np.outer(np.ones(np.size(u)), np.cos(v))  
+
+        fig = plt.figure()
+        ax = fig.add_subplot(111, projection='3d')
+        ax.plot_surface(X, Y, Z, color='b', alpha=0.6)  
+
+        ax.set_xlabel('X')
+        ax.set_ylabel('Y')
+        ax.set_zlabel('Z')
+        ax.set_title('3D Sphere')
+
+        plt.show()  
+
+z=float(input('Введите координату центра сферы по оси Z: '))
+
+Sphere_1=Sphere(x,r,z,r)
+
+Sphere_1.draw_sphere()
